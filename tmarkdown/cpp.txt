@@ -1,0 +1,85 @@
+module Cpp
+{
+    language Cpp
+    {   
+    token EXCLAMATION_MARK = '!';
+    token QUOTATION_MARK = '"';
+
+    token DOLLAR_SIGN = '$';
+    token PERCENT_SIGN = '%';
+    token AMPERSAND = '&';
+    token APOSTROPHE = '\'';
+    token LEFT_PARENTHESIS = '(';
+    token RIGHT_PARENTHESIS = ')';
+    token ASTERISK = '*';
+    token PLUS_SIGN = '+';
+    token COMMA = ',';
+    token HYPHEN_MINUS = '-';
+    token FULL_STOP = '.';
+    token SOLIDUS = '/';
+    token COLON = ':';
+    token SEMICOLON = ';';
+    token LESS_THAN_SIGN = '<';
+    token EQUALS_SIGN = '=';
+    token GREATER_THAN_SIGN = '>';
+    token QUESTION_MARK = '?';
+    token COMMERCIAL_AT = '@';
+    token LEFT_SQUARE_BRACKET = '[';
+    token REVERSE_SOLIDUS = '\\';
+    token RIGHT_SQUARE_BRACKET = ']';
+    token CIRCUMFLEX_ACCENT = '^';
+    token LOW_LINE = '_';
+    token GRAVE_ACCENT = '`';
+    token LEFT_CURLY_BRACKET = '{';
+    token VERTICAL_LINE = '|';
+    token RIGHT_CURLY_BRACKET = '}';
+    token TILL = '~';
+    token NUMBER_SIGN = '#';
+
+    token TKNOWIKI_BLOCK_CLOSE = "```";
+    token LINECOMMENT = ("//" (' '..'-' | '/'..'\u00FF') (' '..'\u00FF')* ('\n' | "\r\n" | "\0"))
+    | ("//" ("\n" | "\r\n" | "\0"));
+
+
+
+    token COMMENT =  ( "/*" (((' '..')' | '+'..'\u00FF' | "\n" | "\r" | "\t")) | ("*" (' '..'.' | '0'..'\u00FF' | "\n" | "\r" | "\t")))* "*/");
+
+    token CHAR = "'"((' '..'&' | '('..'[' | ']'..'\u00FF') |
+    ('\\'('\'' | '\\' | '/' | '0' | 'b' | 'f' | 'n' | 'r' | 't' | ('u'('0'..'9' | 'A'..'F' | 'a'..'f')('0'..'9' | 'A'..'F' | 'a'..'f')('0'..'9' | 'A'..'F' | 'a'..'f')('0'..'9' | 'A'..'F' | 'a'..'f'))))
+                                     )* "'";
+
+
+
+
+    token STRING = '"'(
+
+      (' '..'!' | '#'..'[' | ']'..'\u00FF') |
+
+      ('\\'('"' | '\\' | '/' | 'b' | 'f' | 'n' | 'r' | 't' | ('u'('0'..'9' | 'A'..'F' | 'a'..'f')('0'..'9' | 'A'..'F' | 'a'..'f')('0'..'9' | 'A'..'F' | 'a'..'f')('0'..'9' | 'A'..'F' | 'a'..'f'))))
+
+    ) *
+
+    '"';
+
+    token NUMBER = '0'..'9'+ ('.' '0'..'9'+)?;
+
+    token Blanks  = (" " | "\t")+ ;
+
+    token BreakLine = ("\r\n" | '\n');
+    token NotBreakLine = '\\' ("\r\n" | '\n');
+
+
+    token EndMark = '\0';
+
+    
+
+    token Number = ('+' | '-') ? ('0'..'9') + ('.' '0'..'9') ? (('E' | 'e')('+' | '-') ? '0'..'9') ?;
+
+    token Identifier   = ('a'..'z' | 'A'..'Z' | '_' | '$' | '#') +
+    ('0'..'9' + ('a'..'z' | 'A'..'Z' | '_' | '$') +) ?;
+
+    // 
+    syntax Main = Identifier;
+
+    }
+}

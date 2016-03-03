@@ -1,0 +1,65 @@
+A:link {
+    text-decoration: none;
+}
+
+A:visited {
+    text-decoration: none;
+}
+
+A:hover {
+    color: rgb(255,0,0);
+}
+
+th {
+    font-family: arial;
+}
+
+body {
+    
+     font: 112.5%/1.5 Georgia, serif;
+}
+
+pre {
+     border: rgb(145,145,145) 1px solid;
+     padding: 4px;
+}
+
+body {
+    padding-left: 1.5em;
+    padding-right: 1.5em;
+    background-color: rgb(245,244,223);
+}
+
+.comment {
+    color: #800000;
+}
+
+.keyword {
+    color: #0000AA;
+    font-weight: bold;
+}
+
+.string {
+    color: teal;
+}
+
+article {
+    background-color: rgb(255,255,255);
+    padding: 40px;
+    margin: 0 auto;
+    max-width: 800px;
+    min-height: 372px;
+}
+
+.pageheader {
+    padding-right: 80px;
+    margin: 0 auto;
+    max-width: 800px;
+}
+
+.linkbox {
+    font-family: 'Open Sans', sans-serif;
+    border: dimgray 1px solid;
+    padding: 10px;
+    background-color: rgb(232, 238, 255);
+}
