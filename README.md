@@ -11,12 +11,12 @@ The tmarkdown suports:
 **bold** and __italic__ using this format
 
 cpp source code
-```cpp
-```
+\```cpp
+\```
 
 Pre
-```
-```
+\```
+\```
 
 * lists
 
