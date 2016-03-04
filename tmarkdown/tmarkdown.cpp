@@ -252,11 +252,8 @@ bool ProcessPCore(WStrBuilder* strBuilder,
             if (p != NULL)
             {
               fwprintf(pFile, L"<img src=\"");
-              PrintHtmlN(pFile, p + 2, (sb.c_str + sb.size) - p - 1 - 2); //-2 md
-              //PrintHtml(pFile, L"html");
-              fwprintf(pFile, L"\">");
-              //PrintHtmlN(pFile, sb.c_str + 1, p - sb.c_str + 1 - 1 - 1);
-              //fwprintf(pFile, L"</a>");
+              PrintHtmlN(pFile, p + 2, (sb.c_str + sb.size) - p - 1 - 2);
+              fwprintf(pFile, L"\">");              
             }
           }
           break;
@@ -274,8 +271,21 @@ bool ProcessPCore(WStrBuilder* strBuilder,
             if (p != NULL)
             {
               fwprintf(pFile, L"<a href=\"");
-              PrintHtmlN(pFile, p + 2, (sb.c_str + sb.size) - p - 1 - 2 - 2); //-2 md
-              PrintHtml(pFile, L"htm");
+              if (sb.size > 4 &&
+                  sb.c_str[sb.size - 4] == L'.' &&
+                  sb.c_str[sb.size - 3] == L'm' &&
+                  sb.c_str[sb.size - 2] == L'd' )
+              {
+                //se for md vira html
+                //2 md 2 do inicio
+                PrintHtmlN(pFile, p + 2, (sb.c_str + sb.size) - p - 1 - 2 - 2);
+                PrintHtml(pFile, L"htm");
+              }
+              else
+              {
+                PrintHtmlN(pFile, p + 2, (sb.c_str + sb.size) - p - 1 - 2);
+              }
+                            
               fwprintf(pFile, L"\">");
               PrintHtmlN(pFile, sb.c_str + 1, p - sb.c_str + 1 - 1 - 1);
               fwprintf(pFile, L"</a>");
@@ -317,6 +327,26 @@ bool ProcessP(WStrBuilder* strBuilder,
                     0);
 }
 
+bool IsKeywordTklgen(const wchar_t* psz)
+{
+  const wchar_t* kws[] =
+  {
+    L"syntax",
+    L"token",
+    L"empty",
+    L"module",
+    L"language",
+    L"any",
+    L"interleave",
+  };
+
+  for (size_t i = 0; i < sizeof(kws) / sizeof(kws[0]); i++)
+  {
+    if (wcscmp(kws[i], psz) == 0)
+      return true;
+  }
+  return false;
+}
 bool IsKeywordCpp(const wchar_t* psz)
 {
   const wchar_t* kws[] =
@@ -413,6 +443,14 @@ bool IsKeywordCpp(const wchar_t* psz)
     L"#include",
     L"#ifdef",
     L"#pragma",
+    L"#define",
+    L"#else",
+    L"#elseif",
+    L"#endif",
+    L"#undef",
+    L"#ifndef",
+    L"#if",
+    L"#error"
   };
   //http://en.cppreference.com/w/c/keyword
   for (size_t i = 0; i < sizeof(kws) / sizeof(kws[0]); i++)
@@ -593,6 +631,17 @@ void ReadStream(Stream* stream,
     {
       continue;
     }
+
+    if (ProcessCode(stream,
+      strBuilder,
+      pFile,
+      &state,
+      L"```tklgen",
+      &IsKeywordTklgen))
+    {
+      continue;
+    }
+    
 
     if (ProcessPre(stream,
                    strBuilder,

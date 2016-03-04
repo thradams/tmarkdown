@@ -5,7 +5,6 @@
  *
  */
 #include "stdafx.h"
-#include <stdbool.h>
 #include "MarkupLex.h"
 const char* Markup_Tokens_ToString(Markup_Tokens e)
 {
@@ -38,7 +37,9 @@ int Markup_GetNext(int state, wchar_t ch)
             return 1;
         else if (ch == L'*')
             return 3;
-        else if (ch >= L'+' && ch <= L'Z')
+        else if (ch >= L'0' && ch <= L'9')
+            return 1;
+        else if (ch >= L'A' && ch <= L'Z')
             return 1;
         else if (ch == L'[')
             return 4;
@@ -67,17 +68,11 @@ int Markup_GetNext(int state, wchar_t ch)
     return 10;
         break;
         case 4:
-        if (ch == L' ')
-            return 4;
-        else if (ch >= L'-' && ch <= L':')
-            return 4;
-        else if (ch >= L'A' && ch <= L'Z')
+        if (ch >= L' ' && ch <= L'\\')
             return 4;
         else if (ch == L']')
             return 11;
-        else if (ch == L'_')
-            return 4;
-        else if (ch >= L'a' && ch <= L'z')
+        else if (ch >= L'^' && ch <= L'~')
             return 4;
         break;
         case 5:
@@ -98,17 +93,11 @@ int Markup_GetNext(int state, wchar_t ch)
             return -1; 
         break;
         case 9:
-        if (ch == L' ')
-            return 9;
-        else if (ch >= L'-' && ch <= L':')
-            return 9;
-        else if (ch >= L'A' && ch <= L'Z')
+        if (ch >= L' ' && ch <= L'\\')
             return 9;
         else if (ch == L']')
             return 15;
-        else if (ch == L'_')
-            return 9;
-        else if (ch >= L'a' && ch <= L'z')
+        else if (ch >= L'^' && ch <= L'~')
             return 9;
         break;
         case 10:
@@ -133,92 +122,56 @@ int Markup_GetNext(int state, wchar_t ch)
     return 18;
         break;
         case 16:
-        if (ch == L' ')
+        if (ch >= L' ' && ch <= L'(')
+            return 16;
+        else if (ch == L')')
             return 19;
-        else if (ch >= L'-' && ch <= L':')
-            return 19;
-        else if (ch >= L'A' && ch <= L'Z')
-            return 19;
-        else if (ch == L'_')
-            return 19;
-        else if (ch >= L'a' && ch <= L'z')
-            return 19;
+        else if (ch >= L'*' && ch <= L'~')
+            return 16;
         break;
         case 17:
         if (ch == L'p')
     return 20;
         break;
         case 18:
-        if (ch == L' ')
+        if (ch >= L' ' && ch <= L'(')
+            return 18;
+        else if (ch == L')')
             return 21;
-        else if (ch >= L'-' && ch <= L':')
-            return 21;
-        else if (ch >= L'A' && ch <= L'Z')
-            return 21;
-        else if (ch == L'_')
-            return 21;
-        else if (ch >= L'a' && ch <= L'z')
-            return 21;
+        else if (ch >= L'*' && ch <= L'~')
+            return 18;
         break;
         case 19:
-        if (ch == L' ')
-            return 19;
-        else if (ch == L')')
-            return 22;
-        else if (ch >= L'-' && ch <= L':')
-            return 19;
-        else if (ch >= L'A' && ch <= L'Z')
-            return 19;
-        else if (ch == L'_')
-            return 19;
-        else if (ch >= L'a' && ch <= L'z')
-            return 19;
+        /* end state for TKLink2*/
         break;
         case 20:
         if (ch == L':')
-            return 23;
+            return 22;
         if (ch == L's')
-    return 24;
-        break;
-        case 21:
-        if (ch == L' ')
-            return 21;
-        else if (ch == L')')
-            return 25;
-        else if (ch >= L'-' && ch <= L':')
-            return 21;
-        else if (ch >= L'A' && ch <= L'Z')
-            return 21;
-        else if (ch == L'_')
-            return 21;
-        else if (ch >= L'a' && ch <= L'z')
-            return 21;
-        break;
-        case 22:
-        /* end state for TKLink2*/
-        break;
-        case 23:
-        if (ch == L'/')
-    return 26;
-        break;
-        case 24:
-        if (ch == L':')
     return 23;
         break;
-        case 25:
+        case 21:
         /* end state for TKImage*/
         break;
-        case 26:
+        case 22:
         if (ch == L'/')
-    return 27;
+    return 24;
         break;
-        case 27:
-        if (ch >= L'!' && ch <= L'~')
-            return 28;
+        case 23:
+        if (ch == L':')
+    return 22;
         break;
-        case 28:
+        case 24:
+        if (ch == L'/')
+    return 25;
+        break;
+        case 25:
         if (ch >= L'!' && ch <= L'~')
-            return 28;
+            return 26;
+        break;
+        case 26:
+        if (ch >= L'!' && ch <= L'~')
+            return 26;
         /* end state for TKLink*/
         break;
     } /*switch*/
@@ -240,9 +193,9 @@ int Markup_GetTokenFromState(int state, Markup_Tokens* tk)
         case 10: *tk = TKBold; break;
         case 12: *tk = TKEscape; break;
         case 13: *tk = TKItalic; break;
-        case 22: *tk = TKLink2; break;
-        case 25: *tk = TKImage; break;
-        case 28: *tk = TKLink; break;
+        case 19: *tk = TKLink2; break;
+        case 21: *tk = TKImage; break;
+        case 26: *tk = TKLink; break;
         default:
             return 0;
     }
