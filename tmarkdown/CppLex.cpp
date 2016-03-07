@@ -6,8 +6,6 @@
  */
 #include "stdafx.h"
 #include "CppLex.h"
-
-
 const char* Cpp_Tokens_ToString(Cpp_Tokens e)
 {
     switch(e)

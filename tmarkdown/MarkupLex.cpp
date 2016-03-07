@@ -37,9 +37,7 @@ int Markup_GetNext(int state, wchar_t ch)
             return 1;
         else if (ch == L'*')
             return 3;
-        else if (ch >= L'0' && ch <= L'9')
-            return 1;
-        else if (ch >= L'A' && ch <= L'Z')
+        else if (ch >= L'+' && ch <= L'Z')
             return 1;
         else if (ch == L'[')
             return 4;
