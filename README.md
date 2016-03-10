@@ -1,3 +1,6 @@
+Next : fix empty line or line with only spaces
+Next : see _ char on p
+
 # tmarkdown
 
 TMarkdown is a command line tool that generates html pages from markdown files.
