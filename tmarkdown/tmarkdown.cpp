@@ -604,6 +604,21 @@ bool ProcessPre(Stream* stream,
 }
 
 
+bool IsEmptyLine(WStrBuilder* strBuilder)
+{
+  if (strBuilder->size == 0)
+  {
+    return true;
+  }
+  const wchar_t *p = strBuilder->c_str;
+  while (*p)
+  {
+    if (*p != L' ')
+      return false;
+    p++;
+  }
+  return true;
+}
 
 void ReadStream(Stream* stream,
                 WStrBuilder* strBuilder,
@@ -683,7 +698,7 @@ void ReadStream(Stream* stream,
       //PrintHtml(pFile, strBuilder->c_str + 1);
       fwprintf(pFile, L"</li>\n");
     }
-    else if (strBuilder->size == 0)
+    else if (IsEmptyLine(strBuilder))
     {
       //process empty line
       CloseP_Or_List(pFile, &state);
