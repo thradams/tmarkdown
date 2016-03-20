@@ -51,7 +51,10 @@ module Markup
     '`' |
     '{' |
     '|' |
-    '}';
+    '}' | 
+	':' |
+	'~' |
+	'\u00FF';
 
     syntax Main = Image;
 

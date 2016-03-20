@@ -51,8 +51,10 @@ int Markup_GetNext(int state, wchar_t ch)
             return 1;
         else if (ch == L'h')
             return 7;
-        else if (ch >= L'i' && ch <= L'}')
+        else if (ch >= L'i' /*&& ch <= L'~'*/)
             return 1;
+        //if (ch == L'\u00ff')
+    //return 1;
         break;
         case 1:
         /* end state for TKOther*/
