@@ -48,7 +48,6 @@ typedef enum
     TKCOMMENT,
     TKCHAR,
     TKSTRING,
-    TKNUMBER,
     TKBlanks,
     TKBreakLine,
     TKNotBreakLine,

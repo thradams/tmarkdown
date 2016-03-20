@@ -347,6 +347,28 @@ bool IsKeywordTklgen(const wchar_t* psz)
   }
   return false;
 }
+
+bool IsKeywordCppExtra(const wchar_t* psz)
+{
+    const wchar_t* kws[] =
+    {
+        L"vector",
+        L"list",
+        L"string",
+        L"wstring",
+        L"function",
+        L"shared_ptr",
+        L"unique_ptr",
+    };
+
+    for (size_t i = 0; i < sizeof(kws) / sizeof(kws[0]); i++)
+    {
+        if (wcscmp(kws[i], psz) == 0)
+            return true;
+    }
+    return false;
+}
+
 bool IsKeywordCpp(const wchar_t* psz)
 {
   const wchar_t* kws[] =
@@ -482,7 +504,8 @@ bool ProcessCode(Stream* stream,
                  FILE* pFile,
                  State* state,
                  const wchar_t* pszLang,
-                 bool (*pfIsKeyword)(const wchar_t* psz))
+                 bool (*pfIsKeyword)(const wchar_t* psz),
+                 bool(*pfIsKeyword2)(const wchar_t* psz))
 {
   if (wcsncmp(strBuilder->c_str, pszLang, wcslen(pszLang)) == 0)
   {
@@ -506,6 +529,11 @@ bool ProcessCode(Stream* stream,
       {
         switch (tk)
         {
+        case TKNumber:
+            fwprintf(pFile, L"<span class=\"number\">");
+            PrintHtml(pFile, strBuilder->c_str);
+            fwprintf(pFile, L"</span>");
+            break;
           case TKLINECOMMENT:
           case TKCOMMENT:
             fwprintf(pFile, L"<span class=\"comment\">");
@@ -525,6 +553,12 @@ bool ProcessCode(Stream* stream,
               fwprintf(pFile, L"<span class=\"keyword\">");
               PrintHtml(pFile, strBuilder->c_str);
               fwprintf(pFile, L"</span>");
+            }
+            else if (pfIsKeyword2(strBuilder->c_str))
+            {
+                fwprintf(pFile, L"<span class=\"keyword2\">");
+                PrintHtml(pFile, strBuilder->c_str);
+                fwprintf(pFile, L"</span>");
             }
             else
             {
@@ -642,7 +676,8 @@ void ReadStream(Stream* stream,
                     pFile,
                     &state,
                     L"```cpp",
-                    &IsKeywordCpp))
+                    &IsKeywordCpp,
+                    &IsKeywordCppExtra))
     {
       continue;
     }
@@ -652,6 +687,7 @@ void ReadStream(Stream* stream,
       pFile,
       &state,
       L"```tklgen",
+      &IsKeywordTklgen,
       &IsKeywordTklgen))
     {
       continue;

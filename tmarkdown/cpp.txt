@@ -61,9 +61,8 @@ module Cpp
 
     '"';
 
-    token NUMBER = '0'..'9'+ ('.' '0'..'9'+)?;
-
-    token Blanks  = (" " | "\t")+ ;
+    
+	token Blanks  = (" " | "\t")+ ;
 
     token BreakLine = ("\r\n" | '\n');
     token NotBreakLine = '\\' ("\r\n" | '\n');

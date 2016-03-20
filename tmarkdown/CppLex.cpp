@@ -47,7 +47,6 @@ const char* Cpp_Tokens_ToString(Cpp_Tokens e)
     case TKCOMMENT: return "COMMENT";
     case TKCHAR: return "CHAR";
     case TKSTRING: return "STRING";
-    case TKNUMBER: return "NUMBER";
     case TKBlanks: return "Blanks";
     case TKBreakLine: return "BreakLine";
     case TKNotBreakLine: return "NotBreakLine";
@@ -174,7 +173,7 @@ int Cpp_GetNext(int state, wchar_t ch)
             return 40;
         else if (ch == L'\\')
             return 42;
-        else if (ch >= L']' /*&& ch <= L'\u00ff'*/)
+        else if (ch >= L']'/* && ch <= L'\u00ff' */)
             return 40;
         /* end state for TKQUOTATION_MARK*/
         break;
@@ -221,7 +220,7 @@ int Cpp_GetNext(int state, wchar_t ch)
             return 44;
         else if (ch == L'\\')
             return 46;
-        else if (ch >= L']' /*&& ch <= L'\u00ff'*/)
+        else if (ch >= L']'/* && ch <= L'\u00ff' */)
             return 44;
         /* end state for TKAPOSTROPHE*/
         break;
@@ -236,7 +235,7 @@ int Cpp_GetNext(int state, wchar_t ch)
         break;
         case 15:
         if (ch >= L'0' && ch <= L'9')
-            return 47;
+            return 20;
         /* end state for TKPLUS_SIGN*/
         break;
         case 16:
@@ -244,7 +243,7 @@ int Cpp_GetNext(int state, wchar_t ch)
         break;
         case 17:
         if (ch >= L'0' && ch <= L'9')
-            return 47;
+            return 20;
         /* end state for TKHYPHEN_MINUS*/
         break;
         case 18:
@@ -252,22 +251,21 @@ int Cpp_GetNext(int state, wchar_t ch)
         break;
         case 19:
         if (ch == L'*')
-            return 48;
+            return 47;
         else if (ch == L'/')
-            return 49;
+            return 48;
         /* end state for TKSOLIDUS*/
         break;
         case 20:
         if (ch == L'.')
-            return 50;
+            return 49;
         else if (ch >= L'0' && ch <= L'9')
             return 20;
         else if (ch == L'E')
-            return 51;
+            return 50;
         else if (ch == L'e')
-            return 51;
-    /*TKNUMBER*/
-        /* end state for TKNUMBER*/
+            return 50;
+        /* end state for TKNumber*/
         break;
         case 21:
         /* end state for TKCOLON*/
@@ -308,9 +306,9 @@ int Cpp_GetNext(int state, wchar_t ch)
         break;
         case 30:
         if (ch == L'\n')
-            return 52;
+            return 51;
         else if (ch == L'\r')
-            return 53;
+            return 52;
         /* end state for TKREVERSE_SOLIDUS*/
         break;
         case 31:
@@ -335,7 +333,7 @@ int Cpp_GetNext(int state, wchar_t ch)
         break;
         case 34:
         if (ch == L'`')
-            return 54;
+            return 53;
         /* end state for TKGRAVE_ACCENT*/
         break;
         case 35:
@@ -362,7 +360,7 @@ int Cpp_GetNext(int state, wchar_t ch)
             return 40;
         else if (ch == L'\\')
             return 42;
-        else if (ch >= L']' /*&& ch <= L'\u00ff'*/)
+        else if (ch >= L']'/* && ch <= L'\u00ff' */)
             return 40;
         break;
         case 41:
@@ -386,19 +384,19 @@ int Cpp_GetNext(int state, wchar_t ch)
         else if (ch == L't')
             return 40;
         if (ch == L'u')
-    return 55;
+    return 54;
         break;
         case 43:
         if (ch == L'$')
-            return 56;
+            return 55;
         else if (ch >= L'0' && ch <= L'9')
             return 43;
         else if (ch >= L'A' && ch <= L'Z')
-            return 56;
+            return 55;
         else if (ch == L'_')
-            return 56;
+            return 55;
         else if (ch >= L'a' && ch <= L'z')
-            return 56;
+            return 55;
         break;
         case 44:
         if (ch >= L' ' && ch <= L'&')
@@ -409,7 +407,7 @@ int Cpp_GetNext(int state, wchar_t ch)
             return 44;
         else if (ch == L'\\')
             return 46;
-        else if (ch >= L']' /*&& ch <= L'\u00ff'*/)
+        else if (ch >= L']'/* && ch <= L'\u00ff' */)
             return 44;
         break;
         case 45:
@@ -433,194 +431,164 @@ int Cpp_GetNext(int state, wchar_t ch)
         else if (ch == L't')
             return 44;
         if (ch == L'u')
-    return 57;
+    return 56;
         break;
         case 47:
-        if (ch == L'.')
-            return 58;
-        else if (ch >= L'0' && ch <= L'9')
+        if (ch >= L'\t' && ch <= L'\n')
             return 47;
-        else if (ch == L'E')
-            return 51;
-        else if (ch == L'e')
-            return 51;
-        /* end state for TKNumber*/
+        else if (ch == L'\r')
+            return 47;
+        else if (ch >= L' ' && ch <= L')')
+            return 47;
+        else if (ch == L'*')
+            return 57;
+        else if (ch >= L'+'/* && ch <= L'\u00ff' */)
+            return 47;
         break;
         case 48:
-        if (ch >= L'\t' && ch <= L'\n')
-            return 48;
+        if (ch == L'\0')
+            return 58;
+        else if (ch == L'\n')
+            return 58;
         else if (ch == L'\r')
-            return 48;
-        else if (ch >= L' ' && ch <= L')')
-            return 48;
-        else if (ch == L'*')
             return 59;
-        else if (ch >= L'+' /*&& ch <= L'\u00ff'*/)
-            return 48;
+        else if (ch >= L' ' && ch <= L'-')
+            return 60;
+        else if (ch >= L'/'/* && ch <= L'\u00ff' */)
+            return 60;
         break;
         case 49:
-        if (ch == L'\0')
-            return 60;
-        else if (ch == L'\n')
-            return 60;
-        else if (ch == L'\r')
+        if (ch >= L'0' && ch <= L'9')
             return 61;
-        else if (ch >= L' ' && ch <= L'-')
-            return 62;
-        else if (ch >= L'/' /*&& ch <= L'\u00ff'*/)
-            return 62;
         break;
         case 50:
-        if (ch >= L'0' && ch <= L'9')
+        if (ch == L'+')
+            return 62;
+        else if (ch == L'-')
+            return 62;
+        else if (ch >= L'0' && ch <= L'9')
             return 63;
         break;
         case 51:
-        if (ch == L'+')
-            return 64;
-        else if (ch == L'-')
-            return 64;
-        else if (ch >= L'0' && ch <= L'9')
-            return 65;
-        break;
-        case 52:
         /* end state for TKNotBreakLine*/
         break;
-        case 53:
+        case 52:
         if (ch == L'\n')
-    return 52;
+    return 51;
+        break;
+        case 53:
+        if (ch == L'`')
+    return 64;
         break;
         case 54:
-        if (ch == L'`')
-    return 66;
-        break;
-        case 55:
-        if (ch >= L'0' && ch <= L'9')
-            return 67;
-        else if (ch >= L'A' && ch <= L'F')
-            return 67;
-        else if (ch >= L'a' && ch <= L'f')
-            return 67;
-        break;
-        case 56:
-        if (ch == L'$')
-            return 56;
-        else if (ch >= L'A' && ch <= L'Z')
-            return 56;
-        else if (ch == L'_')
-            return 56;
-        else if (ch >= L'a' && ch <= L'z')
-            return 56;
-        /* end state for TKIdentifier*/
-        break;
-        case 57:
-        if (ch >= L'0' && ch <= L'9')
-            return 68;
-        else if (ch >= L'A' && ch <= L'F')
-            return 68;
-        else if (ch >= L'a' && ch <= L'f')
-            return 68;
-        break;
-        case 58:
-        if (ch >= L'0' && ch <= L'9')
-            return 69;
-        break;
-        case 59:
-        if (ch >= L'\t' && ch <= L'\n')
-            return 48;
-        else if (ch == L'\r')
-            return 48;
-        else if (ch >= L' ' && ch <= L'.')
-            return 48;
-        else if (ch == L'/')
-            return 70;
-        else if (ch >= L'0' /*&& ch <= L'\u00ff'*/)
-            return 48;
-        break;
-        case 60:
-        /* end state for TKLINECOMMENT*/
-        break;
-        case 61:
-        if (ch == L'\n')
-    return 60;
-        break;
-        case 62:
-        if (ch == L'\0')
-            return 60;
-        else if (ch == L'\n')
-            return 60;
-        else if (ch == L'\r')
-            return 61;
-        else if (ch >= L' ' /*&& ch <= L'\u00ff'*/)
-            return 62;
-        break;
-        case 63:
-        if (ch >= L'0' && ch <= L'9')
-            return 71;
-        else if (ch == L'E')
-            return 51;
-        else if (ch == L'e')
-            return 51;
-    /*TKNUMBER*/
-        /* end state for TKNUMBER*/
-        break;
-        case 64:
         if (ch >= L'0' && ch <= L'9')
             return 65;
+        else if (ch >= L'A' && ch <= L'F')
+            return 65;
+        else if (ch >= L'a' && ch <= L'f')
+            return 65;
         break;
-        case 65:
+        case 55:
+        if (ch == L'$')
+            return 55;
+        else if (ch >= L'A' && ch <= L'Z')
+            return 55;
+        else if (ch == L'_')
+            return 55;
+        else if (ch >= L'a' && ch <= L'z')
+            return 55;
+        /* end state for TKIdentifier*/
+        break;
+        case 56:
+        if (ch >= L'0' && ch <= L'9')
+            return 66;
+        else if (ch >= L'A' && ch <= L'F')
+            return 66;
+        else if (ch >= L'a' && ch <= L'f')
+            return 66;
+        break;
+        case 57:
+        if (ch >= L'\t' && ch <= L'\n')
+            return 47;
+        else if (ch == L'\r')
+            return 47;
+        else if (ch >= L' ' && ch <= L'.')
+            return 47;
+        else if (ch == L'/')
+            return 67;
+        else if (ch >= L'0'/* && ch <= L'\u00ff' */)
+            return 47;
+        break;
+        case 58:
+        /* end state for TKLINECOMMENT*/
+        break;
+        case 59:
+        if (ch == L'\n')
+    return 58;
+        break;
+        case 60:
+        if (ch == L'\0')
+            return 58;
+        else if (ch == L'\n')
+            return 58;
+        else if (ch == L'\r')
+            return 59;
+        else if (ch >= L' '/* && ch <= L'\u00ff' */)
+            return 60;
+        break;
+        case 61:
+        if (ch == L'E')
+            return 50;
+        else if (ch == L'e')
+            return 50;
         /* end state for TKNumber*/
         break;
-        case 66:
+        case 62:
+        if (ch >= L'0' && ch <= L'9')
+            return 63;
+        break;
+        case 63:
+        /* end state for TKNumber*/
+        break;
+        case 64:
         /* end state for TKTKNOWIKI_BLOCK_CLOSE*/
         break;
-        case 67:
+        case 65:
         if (ch >= L'0' && ch <= L'9')
-            return 72;
+            return 68;
         else if (ch >= L'A' && ch <= L'F')
-            return 72;
+            return 68;
         else if (ch >= L'a' && ch <= L'f')
-            return 72;
+            return 68;
+        break;
+        case 66:
+        if (ch >= L'0' && ch <= L'9')
+            return 69;
+        else if (ch >= L'A' && ch <= L'F')
+            return 69;
+        else if (ch >= L'a' && ch <= L'f')
+            return 69;
+        break;
+        case 67:
+        /* end state for TKCOMMENT*/
         break;
         case 68:
         if (ch >= L'0' && ch <= L'9')
-            return 73;
+            return 70;
         else if (ch >= L'A' && ch <= L'F')
-            return 73;
+            return 70;
         else if (ch >= L'a' && ch <= L'f')
-            return 73;
+            return 70;
         break;
         case 69:
-        if (ch == L'E')
-            return 51;
-        else if (ch == L'e')
-            return 51;
-        /* end state for TKNumber*/
-        break;
-        case 70:
-        /* end state for TKCOMMENT*/
-        break;
-        case 71:
         if (ch >= L'0' && ch <= L'9')
             return 71;
-        /* end state for TKNUMBER*/
-        break;
-        case 72:
-        if (ch >= L'0' && ch <= L'9')
-            return 74;
         else if (ch >= L'A' && ch <= L'F')
-            return 74;
+            return 71;
         else if (ch >= L'a' && ch <= L'f')
-            return 74;
+            return 71;
         break;
-        case 73:
-        if (ch >= L'0' && ch <= L'9')
-            return 75;
-        else if (ch >= L'A' && ch <= L'F')
-            return 75;
-        else if (ch >= L'a' && ch <= L'f')
-            return 75;
-        break;
-        case 74:
+        case 70:
         if (ch >= L'0' && ch <= L'9')
             return 40;
         else if (ch >= L'A' && ch <= L'F')
@@ -628,7 +596,7 @@ int Cpp_GetNext(int state, wchar_t ch)
         else if (ch >= L'a' && ch <= L'f')
             return 40;
         break;
-        case 75:
+        case 71:
         if (ch >= L'0' && ch <= L'9')
             return 44;
         else if (ch >= L'A' && ch <= L'F')
@@ -667,7 +635,7 @@ int Cpp_GetTokenFromState(int state, Cpp_Tokens* tk)
         case 17: *tk = TKHYPHEN_MINUS; break;
         case 18: *tk = TKFULL_STOP; break;
         case 19: *tk = TKSOLIDUS; break;
-        case 20: *tk = TKNUMBER; break;
+        case 20: *tk = TKNumber; break;
         case 21: *tk = TKCOLON; break;
         case 22: *tk = TKSEMICOLON; break;
         case 23: *tk = TKLESS_THAN_SIGN; break;
@@ -688,16 +656,13 @@ int Cpp_GetTokenFromState(int state, Cpp_Tokens* tk)
         case 38: *tk = TKTILL; break;
         case 41: *tk = TKSTRING; break;
         case 45: *tk = TKCHAR; break;
-        case 47: *tk = TKNumber; break;
-        case 52: *tk = TKNotBreakLine; break;
-        case 56: *tk = TKIdentifier; break;
-        case 60: *tk = TKLINECOMMENT; break;
-        case 63: *tk = TKNUMBER; break;
-        case 65: *tk = TKNumber; break;
-        case 66: *tk = TKTKNOWIKI_BLOCK_CLOSE; break;
-        case 69: *tk = TKNumber; break;
-        case 70: *tk = TKCOMMENT; break;
-        case 71: *tk = TKNUMBER; break;
+        case 51: *tk = TKNotBreakLine; break;
+        case 55: *tk = TKIdentifier; break;
+        case 58: *tk = TKLINECOMMENT; break;
+        case 61: *tk = TKNumber; break;
+        case 63: *tk = TKNumber; break;
+        case 64: *tk = TKTKNOWIKI_BLOCK_CLOSE; break;
+        case 67: *tk = TKCOMMENT; break;
         default:
             return 0;
     }
